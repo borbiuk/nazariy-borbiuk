@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using LogicApplication.Company.Employees;
+using LogicApplication.Company;
 
 namespace LogicTests.Mockys
 {
+    public class FakeDepartment : Department
+    {
+        public List<Manager> GetManagers { get => _managers; set => _managers = value; }
+    }
+
     public class FakeManager : Manager
     {
         public FakeManager()
@@ -27,6 +29,14 @@ namespace LogicTests.Mockys
     {
         public FakeDesigner()
             : base("firstName", "secondName", 100, 1, 1)
+        {
+        }
+    }
+
+    class FakeEmployee : Employee
+    {
+        public FakeEmployee()
+            : base("firstName", "secondName", 100, 1, null)
         {
         }
     }

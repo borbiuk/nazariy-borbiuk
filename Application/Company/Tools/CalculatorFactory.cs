@@ -5,35 +5,33 @@ using LogicApplication.Company.Employees;
 namespace LogicApplication.Company.Tools
 {
     /// <summary>
-    /// factory of calculators for employees
+    /// Factory of employees calculators
     /// </summary>
     public static class CalculatorFactory
     {
-        private static readonly Dictionary<Type, int> typePairs = new Dictionary<Type, int>
-        {
-            {typeof(Employee), 0 },
-            {typeof(Manager), 1 },
-            {typeof(Developer), 2 },
-            {typeof(Designer), 3 }
-        };
+        // pairs of employee type and calculator
+        private static readonly Dictionary<Type, ICalculator> employeeToCalculator;
 
-        // create calculator by employee type
-        public static ICalculator CreateCalculator(Employee employee)
+        // static initialization
+        static CalculatorFactory()
         {
-            switch(typePairs[employee.GetType()])
+            employeeToCalculator = new Dictionary<Type, ICalculator>
             {
-                case 1:
-                    return new ManagerCalculator();
+                { typeof(Manager), new ManagerCalculator() },
+                { typeof(Developer), new DeveloperCalculator() },
+                { typeof(Designer), new DesignerCalculator() }
+            };
+        }
 
-                case 2:
-                    return new DeveloperCalculator();
-
-                case 3:
-                    return new DesignerCalculator();
-
-                default:
-                    throw new ArgumentOutOfRangeException("Can't create Calcutator for this employee");
+        // return calculator by employee type
+        public static ICalculator GetCalculator(Employee employee)
+        {
+            if (!employeeToCalculator.ContainsKey(employee.GetType()))
+            {
+                throw new ArgumentException("Factory not contains calculator for this employee");
             }
+
+            return employeeToCalculator[employee.GetType()];
         }
     }
 }

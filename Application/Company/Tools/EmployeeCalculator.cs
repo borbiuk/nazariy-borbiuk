@@ -1,5 +1,4 @@
-﻿using System;
-using LogicApplication.Company.Employees;
+﻿using LogicApplication.Company.Employees;
 
 namespace LogicApplication.Company.Tools
 {

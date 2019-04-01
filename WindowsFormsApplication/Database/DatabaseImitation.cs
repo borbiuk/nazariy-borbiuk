@@ -3,6 +3,9 @@ using LogicApplication.Company.Employees;
 
 namespace WindowsFormsApplication.Database
 {
+    /*
+     * then there will be a database
+     */
     public class DatabaseImitation
     {
         private static List<Employee> EmployeeList { get; set; }
@@ -31,6 +34,7 @@ namespace WindowsFormsApplication.Database
         public static void AddEmployee(Developer developer) { EmployeeList.Add(developer); }
         public static void AddEmployee(Designer designer) { EmployeeList.Add(designer); }
 
+        // Display all items
         public override string ToString()
         {
             string result = string.Empty;

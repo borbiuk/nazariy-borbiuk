@@ -56,9 +56,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ExampleUnitTest.cs" />
     <Compile Include="Mockys\Mock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\CalculatorsFactoryTests.cs" />
     <Compile Include="Tests\DepartmentTests.cs" />
     <Compile Include="Tests\DesignerTests.cs" />
   </ItemGroup>

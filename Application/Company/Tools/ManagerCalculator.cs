@@ -7,19 +7,24 @@ namespace LogicApplication.Company.Tools
     public class ManagerCalculator : EmployeeCalculator
     {
         // salary calculator for manager
-        public override decimal CalculateSalary(Employee manager)
+        public override decimal CalculateSalary(Employee employee)
         {
-            decimal salaryWithBonus = base.CalculateSalary(manager);
+            if (!(employee is Manager))
+            {
+                throw new ArgumentException("Emloyee must be manager");
+            }
 
-            if (((Manager)manager).Team.Count > 10)
+            decimal salaryWithBonus = base.CalculateSalary(employee);
+
+            if (((Manager)employee).Team.Count > 10)
             {
                 salaryWithBonus += 300;
             }
-            else if (((Manager)manager).Team.Count > 5)
+            else if (((Manager)employee).Team.Count > 5)
             {
                 salaryWithBonus += 200;
             }
-            if (IsBonus(((Manager)manager).Team))
+            if (IsBonusByTeamContain(((Manager)employee).Team))
             {
                 salaryWithBonus *= 1.1m;
             }
@@ -28,7 +33,7 @@ namespace LogicApplication.Company.Tools
         }
 
         // bonus by team condition
-        private bool IsBonus(List<Employee> team)
+        private bool IsBonusByTeamContain(List<Employee> team)
         {
             int diff = 0;
             foreach (var employee in team)

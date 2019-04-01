@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using LogicApplication.Company.Employees;
 using LogicApplication.Company.Tools;
@@ -9,75 +8,51 @@ namespace LogicApplication.Company
 {
     public class Department
     {
-        // pairs of employee type and calculator
-        private static ConcurrentDictionary<Type, ICalculator> _employeeToCalculator;
-        private ICalculator _calculator;
-
         // list of managers
-        public List<Manager> Managers { get; private set; }
-
-        // static constructor
-        static Department()
-        {
-            _employeeToCalculator = new ConcurrentDictionary<Type, ICalculator>();
-        }
+        protected List<Manager> _managers;
 
         // constructor
         public Department()
         {
-            Managers = new List<Manager>();
+            _managers = new List<Manager>();
         }
 
         // add manager for department
         public void AddManager(Manager manager)
         {
-            if (!Managers.Contains(manager))
-                Managers.Add(manager);
-        }
-
-        // add manager for department
-        public void AddManager(Manager[] managers)
-        {
-            Parallel.ForEach(managers, manager =>
+            if (_managers.Contains(manager))
             {
-                if (!Managers.Contains(manager))
-                {
-                    Managers.Add(manager);
-                }
-            });
+                throw new ArgumentException("This manager has already been added to the list");
+            }
+
+            _managers.Add(manager);
         }
 
         // give a salary to all employees
+        /*
+         * After changing ConcurentDictionary<> to Dictionary<> sometimes skipping one employee.
+         * fixing in process ...
+         */
         public List<string> GiveSalary()
         {
-            List<string> info = new List<string>();
+            List<string> report = new List<string>();
 
-            Parallel.ForEach(Managers, manager =>
+            Parallel.ForEach(_managers, manager =>
             {
-                info.Add(GiveSalary(manager));
+                report.Add(GiveSalary(manager));
                 Parallel.ForEach(manager.Team, member => 
                 {
-                    info.Add(GiveSalary(member));
+                    report.Add(GiveSalary(member));
                 });
             });
 
-            return info;
+            return report;
         }
 
         // give a salary to the employee
-        public string GiveSalary(Employee employee)
+        private string GiveSalary(Employee employee)
         {
-            // if there is no calculator for an employee, then will create it
-            if (!_employeeToCalculator.ContainsKey(employee.GetType()))
-            {
-                _employeeToCalculator.TryAdd(
-                    employee.GetType(), 
-                    CalculatorFactory.CreateCalculator(employee)
-                    );
-            }
-
-            // set calculator by employee type
-            _calculator = _employeeToCalculator[employee.GetType()];
+            ICalculator _calculator = CalculatorFactory.GetCalculator(employee);
 
             return string.Format("{0} {1}: got salary: {2:N0}", 
                     employee.FirstName, 

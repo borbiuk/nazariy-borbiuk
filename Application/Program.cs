@@ -31,8 +31,14 @@ namespace LogicApplication
             Designer designer2 = new Designer("Des2", "Des2s", 100, 11, 0.1m);
 
             // add emplotees to managers
-            manager1.AddToTeam(new Employee[] { designer0, designer1, developer0 });
-            manager0.AddToTeam(new Employee[] { designer2, developer1, developer2 });
+            manager0.AddToTeam(designer0);
+            manager0.AddToTeam(developer0);
+            manager0.AddToTeam(developer1);
+
+            manager1.AddToTeam(designer1);
+            manager1.AddToTeam(designer2);
+            manager1.AddToTeam(developer2);
+            
 
             // give salary
             List<string> salaryInfo = department.GiveSalary();

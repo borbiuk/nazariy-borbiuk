@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace LogicApplication.Company.Employees
 {
     public class Manager : Employee
     {
         // a list of employees guided by the manager
+        /*
+         * Not private, because we call to this property from calculator and department
+         * to get count, team members, etc.
+         */
         public List<Employee> Team { get; protected set; }
 
         // constructor
@@ -19,26 +22,18 @@ namespace LogicApplication.Company.Employees
         // add employee to manager team
         public void AddToTeam(Employee employee)
         {
-            if (employee is Manager)
+            if (!(employee is Developer || employee is Designer))
             {
-                throw new ArgumentOutOfRangeException("You can't add manager to team");
+                throw new ArgumentOutOfRangeException(
+                        "To add an employee to the team, he must be a developer or designer");
             }
             if (Team.Contains(employee))
             {
                 throw new ArgumentException("This employee has already been added to the team");
             }
 
-            employee.SetManager = this;
+            employee.Manager = this;
             Team.Add(employee);
-        }
-
-        // add employees to manager team
-        public void AddToTeam(Employee[] employees)
-        {
-            Parallel.ForEach(employees, employee =>
-            {
-                AddToTeam(employee);
-            });
         }
     }
 }

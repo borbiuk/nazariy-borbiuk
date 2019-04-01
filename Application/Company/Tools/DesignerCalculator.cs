@@ -6,9 +6,14 @@ namespace LogicApplication.Company.Tools
     public class DesignerCalculator : EmployeeCalculator
     {
         // calculate salary with bonus for designer
-        public override decimal CalculateSalary(Employee designer)
+        public override decimal CalculateSalary(Employee employee)
         {
-            return base.CalculateSalary(designer) * ((Designer)designer).Effectiveness;
+            if (!(employee is Designer))
+            {
+                throw new ArgumentException("Emloyee must be designer");
+            }
+
+            return base.CalculateSalary(employee) * ((Designer)employee).Effectiveness;
         }
     }
 }
